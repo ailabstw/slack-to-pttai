@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const { createEventAdapter } = require('@slack/events-api')
 const { WebClient } = require('@slack/web-api')
 const assert = require('assert')
