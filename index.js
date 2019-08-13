@@ -28,9 +28,11 @@ async function main () {
   const slackEvents = createEventAdapter(SLACK_SIGNING_SECRET)
   slackEvents.on('message', async (event) => {
     console.log(event)
-    console.log(`Received a message event: user ${users[event.user]} in channel ${channels[event.channel]} says ${event.text}`)
+    if (event.type === 'message') {
+      console.log(`Received a message event: user ${users[event.user]} in channel ${channels[event.channel]} says ${event.text}`)
 
-    await post(channels[event.channel], `<${users[event.user]}>: ${event.text}`)
+      await post(channels[event.channel], `<${users[event.user]}>: ${event.text}`)
+    }
   })
 
   slackEvents.on('error', console.error)
