@@ -35,7 +35,11 @@ async function main () {
     }
   })
 
-  slackEvents.on('error', console.error)
+  slackEvents.on('error', (err) => {
+    if (err instanceof TypeError) return
+
+    console.error(err)
+  })
 
   slackEvents.start(port).then(() => {
     console.log(`server listening on port ${port}`)
