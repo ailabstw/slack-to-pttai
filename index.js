@@ -29,9 +29,10 @@ async function main () {
   slackEvents.on('message', async (event) => {
     console.log(event)
     if (users[event.user]) {
-      console.log(`Received a message event: user ${users[event.user]} in channel ${channels[event.channel]} says ${event.text}`)
+      console.log(`Received a message event: user ${users[event.user]} in channel ${channels[event.channel]} says ${event.text} with ${event.files ? event.files.length : 0} files`)
+      let fileURLs = event.files ? event.files.map(f => f.url_private) : []
 
-      await post(channels[event.channel], `<${users[event.user]}>: ${event.text}`)
+      await post(channels[event.channel], `<${users[event.user]}>: ${event.text} ${fileURLs.join(' ')}`)
     }
   })
 
