@@ -31,10 +31,12 @@ async function main () {
     let text = event.text
     if (users[event.user]) {
       // replace mentioned user ID to user name
-      for (let mention of text.match(/<@(.+)>/g)) {
-        let userID = mention.match(/<@(.+)>/)[1]
-        if (userID) {
-          text = text.replace(userID, users[userID])
+      if (text.match(/<@(.+)>/g)) {
+        for (let mention of text.match(/<@(.+)>/g)) {
+          let userID = mention.match(/<@(.+)>/)[1]
+          if (userID) {
+            text = text.replace(userID, users[userID])
+          }
         }
       }
 
