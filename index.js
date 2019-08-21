@@ -28,11 +28,20 @@ async function main () {
   const slackEvents = createEventAdapter(SLACK_SIGNING_SECRET)
   slackEvents.on('message', async (event) => {
     console.log(event)
+    let text = event.text
     if (users[event.user]) {
-      console.log(`Received a message event: user ${users[event.user]} in channel ${channels[event.channel]} says ${event.text} with ${event.files ? event.files.length : 0} files`)
+      // replace mentioned user ID to user name
+      for (let mention of text.match(/<@(.+)>/g)) {
+        let userID = mention.match(/<@(.+)>/)[1]
+        if (userID) {
+          text = text.replace(userID, users[userID])
+        }
+      }
+
+      console.log(`Received a message event: user ${users[event.user]} in channel ${channels[event.channel]} says ${text} with ${event.files ? event.files.length : 0} files`)
       let fileURLs = event.files ? event.files.map(f => f.url_private) : []
 
-      await post(channels[event.channel], `<${users[event.user]}>: ${event.text} ${fileURLs.join(' ')}`)
+      await post(channels[event.channel], `<${users[event.user]}>: ${text} ${fileURLs.join(' ')}`)
     }
   })
 
