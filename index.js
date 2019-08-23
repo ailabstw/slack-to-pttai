@@ -18,6 +18,9 @@ assert.ok(PTTAI_GATEWAY_URL, 'PTTAI_GATEWAY is undefined')
 assert.ok(PTTAI_TOKEN, 'PTTAI_TOKEN is undefiend')
 assert.ok(SLACK_SIGNING_SECRET, 'SLACK_SIGNING_SECRET is undefined')
 
+const userMentions = /<@([^<]+)>/g
+const mentionedUserID = /<@([^<]+)>/
+
 async function main () {
   const web = new WebClient(token)
 
@@ -31,9 +34,9 @@ async function main () {
     let text = event.text
     if (users[event.user]) {
       // replace mentioned user ID to user name
-      if (text.match(/<@(.+)>/g)) {
-        for (let mention of text.match(/<@(.+)>/g)) {
-          let userID = mention.match(/<@(.+)>/)[1]
+      if (text.match(userMentions)) {
+        for (let mention of text.match(userMentions)) {
+          let userID = mention.match(mentionedUserID)[1]
           if (userID) {
             text = text.replace(userID, users[userID])
           }
