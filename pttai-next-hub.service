@@ -1,0 +1,14 @@
+[Unit]
+Description=slack-to-pttai
+After=network.target
+
+[Service]
+ExecStart=node index.js
+WorkingDirectory=/home/ubuntu/slack-to-pttai
+Type=simple
+User=ubuntu
+Restart=always
+TimeoutSec=15
+
+[Install]
+WantedBy=multi-user.target
